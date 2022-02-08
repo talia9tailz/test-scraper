@@ -29,10 +29,14 @@ with open('input.csv', newline='') as f_in:
             data = { 'address1': row[1], 'zip': row[4] }
             # request address lookup through USPS
             r = requests.post(url=url, headers=headers, data=data)
-            # determine address validity
-            if 'ADDRESS NOT FOUND' in r.text:
-                row.append('False')
+            # check response code
+            if str(r) == '<Response [200]>':
+                # determine address validity
+                if 'ADDRESS NOT FOUND' in r.text:
+                    row.append('False')
+                else:
+                    row.append('True')
             else:
-                row.append('True')
-            # write to output sheet
+                row.append(r)
+                # write to output sheet
             writer.writerow(row)
