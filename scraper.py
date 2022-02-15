@@ -1,8 +1,7 @@
 import requests, csv
 
 # obtain input spreadsheet
-input_sheet = requests.get('https://docs.google.com/spreadsheets/d/1H1a9eBamflt3w-4BPEk1kJYc4VgsDBWlDjkS0hV5tAY/ex
-port?format=csv')
+input_sheet = requests.get('https://docs.google.com/spreadsheets/d/1H1a9eBamflt3w-4BPEk1kJYc4VgsDBWlDjkS0hV5tAY/export?format=csv')
 f = open('input.csv', 'wb')
 f.write(input_sheet.content)
 f.close()
