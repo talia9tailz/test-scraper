@@ -1,10 +1,16 @@
 import requests, csv
 
 # obtain input spreadsheet
-input_sheet = requests.get('https://docs.google.com/spreadsheets/d/1H1a9eBamflt3w-4BPEk1kJYc4VgsDBWlDjkS0hV5tAY/export?format=csv')
-f = open('input.csv', 'wb')
-f.write(input_sheet.content)
-f.close()
+r = requests.get('https://docs.google.com/spreadsheets/d/1H1a9eBamflt3w-4BPEk1kJYc4VgsDBWlDjkS0hV5tAY/export?format=csv')
+# check respoonse code
+if r.status_code == 200:
+    # save input sheet
+    f = open('input.csv', 'wb')
+    f.write(r.content)
+    f.close()
+else:
+    # continue with offline sheet
+    print('Request failed', r, 'Attempting with offline sheet...')
 # create output spreadsheet
 f_out = open('output.csv', 'w')
 f_out.write('')
@@ -29,7 +35,7 @@ with open('input.csv', newline='') as f_in:
             # request address lookup through USPS
             r = requests.post(url=url, headers=headers, data=data)
             # check response code
-            if str(r) == '<Response [200]>':
+            if r.status_code == 200:
                 # determine address validity
                 if 'ADDRESS NOT FOUND' in r.text:
                     row.append('False')
